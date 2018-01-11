@@ -33,8 +33,6 @@ while True:
     elif left_light.read_analog() > 10:
         left_wheel(turn_speed)
         right_wheel(turn_speed/turn_ratio)
-        turn = "left"
     elif right_light.read_analog() > 10:
         right_wheel(turn_speed)
         left_wheel(turn_speed/turn_ratio)
-        turn = "right"
