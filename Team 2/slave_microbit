@@ -1,0 +1,103 @@
+Conversation opened. 1 read message.
+  More 
+Print all
+(no subject) 
+Inbox
+x 
+
+Suowei Hu <inexplicablefate@gmail.com>
+17:38 (16 hours ago)
+
+to me 
+from microbit import *
+import radio
+
+current_gesture = ""
+Radio_message = ""
+img_down = Image("99999:"
+                 "00000:"
+                 "00000:"
+                 "00000:"
+                 "00000")
+img_up = Image("00000:00000:00000:00000:99999")
+img_right = Image("00009:"
+                  "00009:"
+                  "00009:"
+                  "00009:"
+                  "00009")
+img_left = Image("90000:"
+                 "90000:"
+                 "90000:"
+                 "90000:"
+                 "90000")
+img_face_up = Image("00000:"
+                    "00000:"
+                    "00900:"
+                    "00000:"
+                    "00000")
+img_face_down = Image("00000:"
+                      "09990:"
+                      "09090:"
+                      "09990:"
+                      "00000")
+                      
+'''                      
+img_shake = Image("99999:",
+                  "99999:",
+                  "99999:",
+                  "99999:",
+                  "99999")
+'''
+
+# 42
+radio.on()
+radio.config(channel=42)
+
+def ges_detection(gesture_type):
+    if Current_ges == gesture_type:
+        return True
+    else:
+        return False
+def ges_action(ges_state, image):
+    if ges_state:
+        display.show(image, wait=False)
+        print(ges_state)
+    else:
+        display.clear()
+def face_dec():
+    state_face_up = ges_detection("face up")
+    state_face_down = ges_detection("face down")
+    ges_action(state_face_up, img_face_up)
+    ges_action(state_face_down, img_face_down)
+def tilt_dec():
+    state_right = ges_detection("right")
+    state_left = ges_detection("left") 
+    state_up = ges_detection("up") 
+    state_down = ges_detection("down")
+    ges_action(state_up, img_up)
+    ges_action(state_left, img_left)
+    ges_action(state_right, img_right)
+    ges_action(state_down, img_down) 
+def shake_dec():
+    state_shake = ges_detection("shake")
+    ges_action(state_shake, img_shake)
+def radio_rec(radio_message_dec, radio_start_indication):
+    radio_message = radio.receive()
+    print(radio_message)
+    if radio_rec == radio_message_dec:
+        print("=====STARTED=====")
+        return radio_start_indication
+    else:
+        return None
+ 
+while True:
+    Current_ges = accelerometer.current_gesture()
+    tilt_dec()
+    
+    '''
+    start_state = radio_rec("x", True)
+    if start_state:
+        shake_dec()
+    if state_shake:
+        radio.send("y")
+    '''
