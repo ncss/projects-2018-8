@@ -3,6 +3,15 @@ Hey everyone! This file is for our git tutorial!
 Add your name below, commit it, then merge.
 
 Jack D. Reichelt
+Timothy Horscroft
 Monte Walker
+<<<<<<< HEAD
 Scott Taylor 
 Jack Jiang
+=======
+oops
+Scott Tayler 
+Jack Jiang
+Emily t
+Suowei Hu
+>>>>>>> 2e1a947ac29509c01c3a03e490c9d0f017679a6a
