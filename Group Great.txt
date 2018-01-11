@@ -10,8 +10,4 @@ Jack Jiang
 Jack Jiang
 Emily t
 Suowei Hu
-<<<<<<< HEAD
-
-=======
 Adam Lucas
->>>>>>> a5dc279933ecdf19347339236efbc9c850fc0c89
