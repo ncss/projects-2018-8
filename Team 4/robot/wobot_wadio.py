@@ -3,10 +3,10 @@ import radio
 
 radio.on()
 radio.config(channel=41)
-left_back = pin12
-left_forward = pin8
-right_back = pin16
-right_forward = pin0
+left_back = pin8
+left_forward = pin12
+right_back = pin0
+right_forward = pin16
 left_light = pin1
 right_light = pin2
 
@@ -65,7 +65,7 @@ while True:
         previous_speeds.append(map_to_range(int(msg)))
         display.show(Image.CHESSBOARD)
     else:
-        previous_speeds.append(avg-5)
+        previous_speeds.append(avg-3)
         display.clear()
     avg = sum(previous_speeds)/len(previous_speeds)
     if avg < 0:
@@ -73,3 +73,6 @@ while True:
     print(avg)
     left_wheel(avg)
     right_wheel(avg)
+    sensor = left_light.read_analog()
+    if sensor < 20:
+       radio.send("time")
