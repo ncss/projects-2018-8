@@ -1,8 +1,10 @@
 # README!
 # scrolls stuff on the microbit when recieved on channel 51
-
-from microbit import *
-import radio
+try:
+    from microbit import *
+    import radio
+except:
+    from quokka import *
 
 radio.on()
 radio.config(channel=51)

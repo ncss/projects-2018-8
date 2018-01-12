@@ -5,7 +5,7 @@
 from microbit import *
 import radio
 
-payload = '+'
+payload = '>'
 
 radio.on()
 radio.config(channel=51)
