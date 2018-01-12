@@ -1,5 +1,3 @@
-# pls dont edit this
-
 from microbit import *
 import radio
 
@@ -26,7 +24,8 @@ class Button:
         return False
 
 
-button = Button(pin0, True)
+# button = Button(pin0, True)
+button = button_a
 
 while True:
     msg = radio.receive()
@@ -34,7 +33,7 @@ while True:
         print(msg)
 
     if button.was_pressed():
-        if button.boolean:
-            radio.send("true")
+        if True:
+            radio.send("tf:true")
         else:
-            radio.send("false")
+            radio.send("tf:false")
