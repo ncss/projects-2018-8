@@ -31,7 +31,7 @@ while True:
                 POINTS -= INCORRECT_PENALTY
             question_asked = False
             display.scroll("Score: {}".format(POINTS), wait=False)
-            radio.send("tof:" + answer)
+            radio.send("tof:" + answer + "-answer")
         else:
             end_time = running_time()
             elapsed_time = end_time - start_time

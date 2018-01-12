@@ -1,11 +1,12 @@
 from microbit import *
 import radio
+import music
 
 GAME_CHANNEL = 49
 radio.config(channel=GAME_CHANNEL)
 radio.on()
 
-TICK = Image("00000:00009:00090:90900:09000")
+TICK = Image("00009:00090:90900:09000:00000")
 CROSS = Image("90009:09090:00900:09090:90009")
 class Button:
     def __init__(self, pin, boolean):
@@ -31,7 +32,7 @@ previous_time = running_time()
 while True:
     msg = radio.receive()
     if msg and msg.startswith("tof:"):
-        if (button.boolean and msg == "tof:true") or (not button.boolean and msg == "tof:false"):
+        if (button.boolean and msg == "tof:true-answer") or (not button.boolean and msg == "tof:false-answer"):
             display.show(TICK)
             music.play(music.POWER_UP)
             celebrate_timer = CELEBRATE_TIME
