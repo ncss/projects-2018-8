@@ -18,6 +18,9 @@ while True:
         # Display And Send Time
         print(time)
         radio.send(str(time))
-        # Reset Time 
+        display.show(Image.HAPPY)
+        sleep(100)
+        # Reset Time  
         prev_time = running_time()  
+        display.clear()
 
