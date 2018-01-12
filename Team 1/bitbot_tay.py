@@ -10,16 +10,16 @@ righty_dir = pin12
 turn_sleep = 210
 
 def left():
-    lefty_speed.write_digital(1)
+    lefty_speed.write_digital(0)
     lefty_dir.write_digital(0)
-    righty_speed.write_analog(0)
+    righty_speed.write_digital(1)
     righty_dir.write_digital(0)
     sleep(turn_sleep)
     
 def right():
     lefty_speed.write_digital(1)
     lefty_dir.write_digital(0)
-    righty_speed.write_analog(0)
+    righty_speed.write_digital(0)
     righty_dir.write_digital(0)
     sleep(turn_sleep)
     
@@ -27,6 +27,12 @@ def HECK_STOP():
     righty_speed.write_digital(0)
     righty_dir.write_digital(0)
     lefty_speed.write_digital(0)
+    lefty_dir.write_digital(0)
+    
+def forward():
+    righty_speed.write_analog(1000)
+    righty_dir.write_digital(0)
+    lefty_speed.write_analog(1000)
     lefty_dir.write_digital(0)
     
 def run_motor(left=0, right=0):
@@ -50,4 +56,17 @@ while True:
 '''
 while True:
     msg = radio.receive()
-    if msg == '
+    if msg == 'G':
+        forward()
+    if msg == 'S':
+        HECK_STOP()
+    if msg == '<':
+        left()
+        forward()
+        print('L')
+    if msg == '>':
+        right()
+        forward()
+        print('R')
+    
+    
