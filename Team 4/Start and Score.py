@@ -5,6 +5,8 @@ radio.on()
 radio.config(channel = 41)
 
 start_time = 0
+finish_time = 0
+score = 0
 prev_time = 0
 race_going = 0
 while True:
@@ -12,6 +14,9 @@ while True:
         print("Pressed")
         start_time = running_time()
         race_going = 1
-    
         
-    print(start_time)
+    if msg:
+        if radio.recive == "TIME" and race_going == 1
+            finish_time = running_time()
+            score = finish_time - start_time
+            print(score)
