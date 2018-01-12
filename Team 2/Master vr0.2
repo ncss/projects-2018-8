@@ -1,0 +1,49 @@
+from microbit import *
+import radio
+
+radio.on()
+radio.config(channel=44)
+
+count_time = 5
+wait_time = 2000
+
+trigger_state = 0  # 0 will be when not running (counting from 5 to 0)
+                   # 1 will be when the game start (start counting)
+                   # 2 will be when scuccessfully do the action     
+                   # 3 will be when not succfully do the action
+score = 0 
+
+start_signal ="1"
+end_signal ="0"
+trigger_signal ="x"
+
+while True:
+    print(str(score))
+    if  trigger_state == 0:
+        for i in range(count_time):
+            display.show(str(count_time - i))
+            sleep(1000)
+            display.clear()
+        
+        radio.send(start_signal)
+        trigger_state = 1
+        
+    if trigger_state == 1:
+        start_time = running_time()
+        while running_time() - start_time < wait_time and trigger_state == 1:
+            display.show(Image.HAPPY)
+            radio_rec = radio.receive()
+            if radio_rec == trigger_signal or button_b.was_pressed():
+                trigger_state = 2
+        while running_time() - start_time >= wait_time and trigger_state == 1:
+            display.show(Image.SAD)
+            trigger_state = 3
+    if trigger_state == 2:
+        score += 1
+        trigger_state = 0
+    elif trigger_state == 3:
+        score -= 1 
+        trigger_state = 0
+    radio.send(end_signal)
+    sleep(1000)
+    display.clear()
