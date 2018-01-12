@@ -1,4 +1,6 @@
-# Write your code here :-)
+# README!
+# scrolls stuff on the microbit when recieved on channel 51
+
 from microbit import *
 import radio
 
