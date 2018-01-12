@@ -46,22 +46,30 @@ def follow_line(turn_ratio, turn_speed):
 #maps sensor value to output value, where x is sensor value, 
 #a->b is the range of sensor values, and c->d is the range of desired output values.
 def map_to_range(x):
-    a = 650
+    a = 100
     b = 2500
-    c = 0
+    c = 170
     d = 1023
     if x < a:
         x = a
     elif x > b:
         x = b
     return 1023 - ((x-a)/(b-a)*(d-c)+c)
-
+previous_speeds = [150]
+avg = 0
 while True:
     msg = radio.receive()
+    if len(previous_speeds) == 2:
+        previous_speeds.pop(0)
     if msg:
-        x = map_to_range(int(msg))
-        left_wheel(x)
-        print(x)
-        sleep(1000)
+        previous_speeds.append(map_to_range(int(msg)))
+        display.show(Image.CHESSBOARD)
     else:
-        left_wheel(0)
+        previous_speeds.append(avg-5)
+        display.clear()
+    avg = sum(previous_speeds)/len(previous_speeds)
+    if avg < 0:
+        avg = 0
+    print(avg)
+    left_wheel(avg)
+    right_wheel(avg)
