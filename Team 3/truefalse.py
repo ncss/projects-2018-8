@@ -9,7 +9,6 @@ radio.on()
 class Button:
     def __init__(self, pin, boolean):
         self.pin = pin
-        self.pin.set_pull(self.pin.NO_PULL)
         self.boolean = boolean
         self.push = True
 
@@ -34,6 +33,6 @@ while True:
 
     if button.was_pressed():
         if True:
-            radio.send("tf:true")
+            radio.send("tof:true")
         else:
-            radio.send("tf:false")
+            radio.send("tof:false")
