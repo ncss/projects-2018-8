@@ -3,10 +3,11 @@
 try:
     from microbit import *
     import radio
+    radio.on()
 except:
     from quokka import *
 
-radio.on()
+
 radio.config(channel=51)
 while True:
     msg = radio.receive()
