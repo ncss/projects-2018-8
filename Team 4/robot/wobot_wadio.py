@@ -66,6 +66,10 @@ length = 2
 while True:
     msg = radio.receive()
    # print(msg)
+    if button_b.is_pressed() == 1:
+        left_wheel(0)
+        right_wheel(0)
+        game_start = 0
     if msg:
         if msg == "start":
             game_start = 1

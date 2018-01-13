@@ -11,6 +11,14 @@ pressed = 0
 prev_time = 0
 race_going = 0
 while True:
+    if button_b.is_pressed() == 1:
+        start_time = 0
+        finish_time = 0
+        score = 0
+        pressed = 0
+        prev_time = 0
+        race_going = 0
+        
     if button_a.is_pressed() == 1 and pressed == 0:
         display.show("3")
         sleep(1000)
