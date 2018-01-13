@@ -7,8 +7,6 @@ radio.config(channel = 41)
 # Set Variables
 prev_time = 0;
 time = 0;
-# Check Repl
-print("FISH")
 # Loop Program
 while True:
     # Read Gesture
