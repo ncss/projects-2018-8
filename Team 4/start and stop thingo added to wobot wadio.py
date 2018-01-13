@@ -3,6 +3,7 @@ import radio
 
 radio.on()
 radio.config(channel=41)
+
 left_back = pin8
 left_forward = pin12
 right_back = pin0
@@ -12,6 +13,7 @@ right_light = pin2
 sense_num = 0
 
 #controls left wheel, -ve speed is backward
+#-1023 to 1023
 def left_wheel(speed):
     if speed < 0 :
         left_forward.write_analog(0)
@@ -21,6 +23,7 @@ def left_wheel(speed):
         left_back.write_analog(0)
 
 #controls right wheel, -ve speed is backward
+#-1023 to 1023
 def right_wheel(speed):
     if speed < 0 :
         right_forward.write_analog(0)
@@ -29,35 +32,27 @@ def right_wheel(speed):
         right_forward.write_analog(speed)
         right_back.write_analog(0)
 
-#follows line. Increased turn ratio results in tighter turning. 
-#turn speed must be a value between 0 -> 1023.
-#time must be in milliseconds
-def follow_line(turn_ratio, turn_speed):
-    total_time = 0
-    while True:
-        if left_light.read_analog() > 10 and right_light.read_analog() > 10:
-            left_wheel(turn_speed)
-            right_wheel(turn_speed)
-        elif left_light.read_analog() > 10:
-            left_wheel(turn_speed)
-            right_wheel(turn_speed/turn_ratio)
-        elif right_light.read_analog() > 10:
-            right_wheel(turn_speed)
-            left_wheel(turn_speed/turn_ratio)
 #maps sensor value to output value, where x is sensor value, 
 #a->b is the range of sensor values, and c->d is the range of desired output values.
-def map_to_range(x):
-    a = 600
-    b = 2000
-    c = 170
-    d = 1023
-    if x < a:
-        x = a
-    elif x > b:
-        x = b
-    return 1023 - ((x-a)/(b-a)*(d-c)+c)
-l_previous_speeds = [150]
-r_previous_speeds = [150]
+def map_to_range(value):
+    initial_min, initial_max, new_min, new_max = 600, 800, 175, 1023
+    #correct values outside range
+    if value < initial_min:
+        value = inital_min
+    if value > initial_max:
+        value = initial_max
+    # Figure out how 'wide' each range is
+    initial_span = initial_max - initial_min
+    new_span = new_max - new_min
+
+    # Convert the left range into a 0-1 range (float)
+    scaled_value = (value - initial_min) / initial_span
+
+    # Convert the 0-1 range into a value in the right range.
+    return 1023 - (new_min + (scaled_value * new_span))
+    
+l_previous_speeds = [0]
+r_previous_speeds = [0]
 l_avg = 0
 r_avg = 0
 length = 2
@@ -68,36 +63,16 @@ while True:
     if len(r_previous_speeds) == length:
         r_previous_speeds.pop(0)
     if msg:
+        print("message", msg)
         if msg.startswith("r"):
-            r_previous_speeds.append(map_to_range(int(msg[1:]))+300)
-            display.show(Image.CHESSBOARD)
+            r_previous_speeds.append(map_to_range(int(msg[1:])))
         elif msg.startswith('l'):
-            l_previous_speeds.append(map_to_range(int(msg[1:]))+300)
-            display.show(Image.CHESSBOARD)
+            l_previous_speeds.append(map_to_range(int(msg[1:])))
     else:
-        l_previous_speeds.append(l_avg-4)
-        r_previous_speeds.append(r_avg-4)
-        display.clear()
+        l_previous_speeds.append(max(0, max(l_previous_speeds)-1))
+        r_previous_speeds.append(max(0, max(r_previous_speeds)-1))
     l_avg = sum(l_previous_speeds)/len(l_previous_speeds)
     r_avg = sum(r_previous_speeds)/len(r_previous_speeds)
-    if l_avg < 0:
-        l_avg = 0
-    if r_avg < 0:
-        r_avg = 0
-    left_wheel(l_avg)
-    right_wheel(r_avg)
-    
-    sensor = left_light.read_analog()
-    if sensor < 20:
-        sense_num += 1
-        sleep(2000)
-    
-        if sense_num == 1:
-            radio.send("start")
-            sleep(2000)
-            
-        if sense_num == 2:
-            radio.send("end")
-            sleep(1000)
-            left_forward.write_analog(0)
-            right_forward.write_analog(0)
+    left_wheel(l_avg + 100)
+    right_wheel(r_avg + 100)
+    print(r_avg)
