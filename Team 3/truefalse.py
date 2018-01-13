@@ -25,19 +25,20 @@ class Button:
         return False
 
 button = Button(pin0, True)
-CELEBRATE_TIME = 3000
+CELEBRATE_TIME = 1000
 celebrate_timer = CELEBRATE_TIME
 previous_time = running_time()
 
 while True:
+    print(celebrate_timer, CELEBRATE_TIME)
     msg = radio.receive()
     if msg and msg.startswith("tof:") and msg.endswith("-answer"):
         if (button.boolean and msg == "tof:true-answer") or (not button.boolean and msg == "tof:false-answer"):
             display.show(TICK)
-            music.play(music.POWER_UP)
+            music.play(music.POWER_UP, wait=False)
         else:
             display.show(CROSS)
-            music.play(music.WAWAWAWAA)
+            music.play(music.WAWAWAWAA, wait=False)
         celebrate_timer = CELEBRATE_TIME
 
     if button.was_pressed():

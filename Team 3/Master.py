@@ -3,7 +3,8 @@ import radio
 # MASTER
 GAME_CHANNEL = 49
 INCORRECT_PENALTY = 5000    # The amount of points (in ms) subtracted due to a wrong answer.
-POINTS = 50000     # The amount of points (in ms) the player begins with.
+START_POINTS = 60000 # The amount of points (in ms) the player begins with.
+points = START_POINTS
 radio.on()
 radio.config(channel = GAME_CHANNEL, power = 7)
 question_asked = False
@@ -28,18 +29,18 @@ while True:
             if incoming == "tof:" + answer:
                 questions_answered += 1
             else:
-                POINTS -= INCORRECT_PENALTY
+                points -= INCORRECT_PENALTY
             question_asked = False
-            display.scroll("Score: {}".format(POINTS), wait=False)
+            display.scroll("Score: {}".format(points), wait=False)
             radio.send("tof:" + answer + "-answer")
         else:
             end_time = running_time()
             elapsed_time = end_time - start_time
             start_time = end_time
-            POINTS -= elapsed_time
+            points -= elapsed_time
     
-    if POINTS <= 0:
-        display.scroll("Game over! {} questions answered!".format(questions_answered))
+    if points <= 0:
+        display.scroll("Game over! {} questions answered correctly!".format(questions_answered))
         questions_answered = 0
-        POINTS = 50000
+        points = START_POINTS
         question_asked = False
