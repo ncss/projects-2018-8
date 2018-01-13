@@ -8,8 +8,8 @@ left_back = pin8
 left_forward = pin12
 right_back = pin0
 right_forward = pin16
-left_light = pin1
-right_light = pin2
+left_sense = pin1
+right_sense = pin2
 sense_num = 0
 
 while True:
@@ -21,7 +21,9 @@ while True:
         if sense_num == 1:
             radio.send("start")
             sleep(2000)
-            
+            left_forward.write_analog(1000)
+            right_forward.write_analog(1000)
+
         if sense_num == 2:
             radio.send("end")
             sleep(1000)

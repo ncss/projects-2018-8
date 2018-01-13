@@ -9,7 +9,6 @@ right_back = pin0
 right_forward = pin16
 left_light = pin1
 right_light = pin2
-sense_num = 0
 
 #controls left wheel, -ve speed is backward
 def left_wheel(speed):
