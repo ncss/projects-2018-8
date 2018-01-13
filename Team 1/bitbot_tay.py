@@ -74,6 +74,7 @@ def get_color():
 colors = [get_color() for i in range(12)]
 
 def rainbow():
+    return
     for i, color in enumerate(colors):
         pixels[i] = tuple(color)
     pixels.show()
