@@ -8,6 +8,8 @@ radio.on()
 
 TICK = Image("00009:00090:90900:09000:00000")
 CROSS = Image("90009:09090:00900:09090:90009")
+
+
 class Button:
     def __init__(self, pin, boolean):
         self.pin = pin
@@ -23,6 +25,7 @@ class Button:
             self.push = True
         
         return False
+
 
 button = Button(pin1, True)
 CELEBRATE_TIME = 2000
