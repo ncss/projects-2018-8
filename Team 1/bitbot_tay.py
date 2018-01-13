@@ -69,7 +69,7 @@ change_light_time = 300
 
 current_before_time = 0
 
-ROUND_TIME = 120
+ROUND_TIME = 60
 
 current_round_time = ROUND_TIME * 1000
 
