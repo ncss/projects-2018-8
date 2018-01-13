@@ -3,13 +3,15 @@ import radio
 
 radio.on()
 radio.config(channel=41)
-left_back = pin8
-left_forward = pin12
-right_back = pin0
-right_forward = pin16
+left_back = pin12
+left_forward = pin8
+right_back = pin16
+right_forward = pin0
 left_light = pin1
 right_light = pin2
 sense_num = 0
+game_start = 0
+light = 0
 
 #controls left wheel, -ve speed is backward
 def left_wheel(speed):
@@ -17,7 +19,7 @@ def left_wheel(speed):
         left_forward.write_analog(0)
         left_back.write_analog(abs(speed))
     else:
-        left_forward.write_analog(speed)
+        left_forward.write_analog(abs(speed))
         left_back.write_analog(0)
 
 #controls right wheel, -ve speed is backward
@@ -63,32 +65,41 @@ r_avg = 0
 length = 2
 while True:
     msg = radio.receive()
-    if len(l_previous_speeds) == length:
-        l_previous_speeds.pop(0)
-    if len(r_previous_speeds) == length:
-        r_previous_speeds.pop(0)
+   # print(msg)
     if msg:
-        if msg.startswith("r"):
-            r_previous_speeds.append(map_to_range(int(msg[1:]))+300)
-            display.show(Image.CHESSBOARD)
-        elif msg.startswith('l'):
-            l_previous_speeds.append(map_to_range(int(msg[1:]))+300)
-            display.show(Image.CHESSBOARD)
-    else:
-        l_previous_speeds.append(l_avg-4)
-        r_previous_speeds.append(r_avg-4)
-        display.clear()
-    l_avg = sum(l_previous_speeds)/len(l_previous_speeds)
-    r_avg = sum(r_previous_speeds)/len(r_previous_speeds)
-    if l_avg < 0:
-        l_avg = 0
-    if r_avg < 0:
-        r_avg = 0
-    left_wheel(l_avg)
-    right_wheel(r_avg)
-    if left_light.read_analog() < 20 and right_light.read_analog() < 20:
-        radio.send('time')
-        left_wheel(0)
-        right_wheel(0)
-        sleep(10000)
-    
+        if msg == "start":
+            game_start = 1
+    if game_start ==1:    
+        if len(l_previous_speeds) == length:
+            l_previous_speeds.pop(0)
+        if len(r_previous_speeds) == length:
+            r_previous_speeds.pop(0)
+        if msg:
+            if msg.startswith("r"):
+                r_previous_speeds.append(map_to_range(int(msg[1:]))+300)
+                display.show(Image.CHESSBOARD)
+            elif msg.startswith('l'):
+                l_previous_speeds.append(map_to_range(int(msg[1:]))+300)
+                display.show(Image.CHESSBOARD)
+        else:
+            l_previous_speeds.append(l_avg-4)
+            r_previous_speeds.append(r_avg-4)
+            display.clear()
+        l_avg = sum(l_previous_speeds)/len(l_previous_speeds)
+        r_avg = sum(r_previous_speeds)/len(r_previous_speeds)
+        if l_avg < 0:
+            l_avg = 0
+        if r_avg < 0:
+            r_avg = 0
+        left_wheel(l_avg)
+        right_wheel(r_avg)
+        
+        light = left_light.read_analog()
+        print(light)
+        if  light < 20:
+            radio.send('time')
+
+            left_wheel(0)
+            right_wheel(0)
+            sleep(10000)
+        
