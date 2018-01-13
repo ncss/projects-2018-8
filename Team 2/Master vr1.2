@@ -1,0 +1,109 @@
+#==================================================================================================================
+from microbit import *
+import radio
+radio.on()
+radio.config(channel = 43)
+radio_mes = ""
+#==============================================Do not change this part==============================================
+
+countdown = 10      #this value will be the time period for players to do the action
+countdown_value = 1 #this will be the numbers that "countdown" is minused after every round
+Game_start= False  #when pressing button, this var will turns to True, which triggers the game to start
+score = 0   #the score that the player gets and is going tyo be displayed at the end 
+trigger_state = 0  # 0 will be when not running (counting from 5 to 0)
+                   # 1 will be when the game start (start counting)
+                   # 2 will be when scuccessfully do the action     
+                   # 3 will be when not succfully do the action
+                   
+                   
+start_signal ="1"   
+end_signal ="0"
+trigger_signal ="x"
+count_time = 5      #time count down before the time period start
+wait_time = 2000    #time period players should react 
+sleep_time = 2000   #sleep time when every round finishes
+score_show_b = False  #show the score after a round or not
+#==================================================================================================================
+
+
+
+
+#==================================================================================================================
+#simple program whihc sihines the led====================================
+def shine_disp ():
+    display.show(Image("99999:99999:99999:99999:99999"), wait=True, loop=False, clear=False)
+    sleep(1000)
+    display.clear()
+    sleep(200)
+    display.show(Image("99999:99999:99999:99999:99999"), wait=True, loop=False, clear=False)
+    sleep(1000)
+    display.clear()
+    sleep(200)
+    display.show(Image("99999:99999:99999:99999:99999"), wait=True, loop=False, clear=False)
+    sleep(1000)
+    display.clear()
+    sleep(200)
+#==================================================================================================================
+#show the score both on display and REPEL============================================================
+def show_score (score_n):
+    display.show(Image("99999:99999:99999:99999:99999"), wait=True, loop=False, clear=False)
+    sleep(500)
+    display.scroll(str(score_n))
+    print(score_n)
+    sleep(200)
+    display.show(Image("99999:99999:99999:99999:99999"), wait=True, loop=False, clear=False)
+    sleep(500)
+    display.clear()
+#==================================================================================================================
+#PLZ donot change this part=================================================================
+
+
+#MAIN CODE+================================================================================================
+while True:
+    radio_rec = radio.receive() #this will be the radio message that is received by microbit (can be Null)
+    radio.send(radio_mes)       #this will be the radio message that will be send to the slave microbit
+    
+    if button_a.was_pressed() and not Game_start:  #when the button is pressed and the game had not started 
+        shine_disp()
+        display.show("GAME START !!!", wait=True, loop=False, clear=True)
+        display.clear()
+        sleep(2000)
+        Game_start=True
+        
+    if Game_start:  #when the game had started
+        #do something 
+        #===========================================================================================
+        if  trigger_state == 0: #for comments on trigger_state, referr to the top defining of the vars
+            for i in range(count_time):
+                display.show(str(count_time - i))
+                sleep(1000)
+                display.clear()
+            
+            radio.send(start_signal)
+            trigger_state = 1
+        
+        if trigger_state == 1: #for comments on trigger_state, referr to the top defining of the vars
+            start_time = running_time()
+            while running_time() - start_time < wait_time and trigger_state == 1:
+                display.show(Image.HAPPY)
+                radio_rec = radio.receive()
+                if radio_rec == trigger_signal or button_b.was_pressed():
+                    trigger_state = 2
+            while running_time() - start_time >= wait_time and trigger_state == 1:
+                display.show(Image.SAD)
+                trigger_state = 3
+        if trigger_state == 2: #for comments on trigger_state, referr to the top defining of the vars
+            score += 1         #win and add score on that 
+            trigger_state = 0
+        elif trigger_state == 3: #for comments on trigger_state, referr to the top defining of the vars
+            score -= 1         #loose and count down score
+            trigger_state = 0
+        radio.send(end_signal)
+        sleep(sleep_time)
+        display.clear()
+
+        #===========================================================================================
+        #print(str(score)) #print the score of the player 
+        #Game_start = False  #return the game start to false so the game could start again
+        show_score(score)
+#MAIN CODE+================================================================================================   
