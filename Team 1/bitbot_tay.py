@@ -19,9 +19,6 @@ current_speed = start_speed
 speed_change = 100
 pixels = NeoPixel(pin13, 12)
 
-for i in range(12):
-    pixels[i] = (0,0,0)
-pixels.show()
 
 def left():
     lefty_speed.write_analog(0)
@@ -61,48 +58,56 @@ def backwards():
     HECK_STOP()
     
     
-    
-def get_color():
-    # returns (0,0,0)
-    return [random.randrange(10) for i in range(3)]
-    
-colors = [get_color() for i in range(12)]
-
-def rainbow():
-    return
-    for i, color in enumerate(colors):
-        pixels[i] = tuple(color)
-    pixels.show()
    
-    colors.append(colors.pop(0))
-    
-    
+   
     
 before = 0
 change_light_time = 300
 
 
-current_round_time = 0
 
-rainbow()
+
+current_before_time = 0
+
+ROUND_TIME = 120
+
+current_round_time = ROUND_TIME * 1000
+
+def convert_milli_to_display(millis):
+    secs = millis // 1000
+    mins = secs // 60
+    secs %= 60
+    return "{:02}{:02}".format(mins,secs)
+
+for i in range(12):
+    pixels[i] = (random.randrange(10),random.randrange(10),random.randrange(10))
+pixels.show()
+
 stop = True
 while True:
     now = running_time()
-    if before+change_light_time < now:
-        rainbow()
-        before = running_time()
+    
     
     left_line = pin11.read_digital()
     right_line = pin5.read_digital()
     msg = radio.receive()
+    
+    
     if msg:
         print('Receive message:', msg)
-    
     
     if msg == 'G':
         forward()
         stop = False
         current_speed = start_speed 
+        
+    if msg == 'E':
+        print("reseting!")
+        current_speed = start_speed 
+        stop = True
+        current_round_time = ROUND_TIME * 1000
+        HECK_STOP()
+        
             
     if msg == 'S':
         HECK_STOP()
@@ -114,6 +119,19 @@ while True:
         display.show(Image.SAD)
         
     else: 
+        if before+change_light_time < now:
+            # current round time is round time in milliseconds
+            current_round_time -= change_light_time
+            print("Time=", current_round_time)
+            msg2 = "B" + convert_milli_to_display(current_round_time)
+            radio.send(msg2)
+            print(msg2)
+            
+            
+            before = running_time()
+            
+        
+        
         if not left_line or not right_line:
             print("Entered!")
             display.show(Image.SWORD)
@@ -135,7 +153,7 @@ while True:
             current_speed = max(current_speed - speed_change, 0)
             forward()
         if msg == '+':
-            current_speed = min(current_speed + speed_change, 1023)
+            current_speed = min(current_speed + speed_change, 1015)
             forward()
     
     
