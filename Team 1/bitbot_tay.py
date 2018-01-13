@@ -46,7 +46,7 @@ def HECK_STOP():
 def forward():
     lefty_speed.write_analog(current_speed)
     lefty_dir.write_digital(0)
-    righty_speed.write_analog(current_speed+7)
+    righty_speed.write_analog(current_speed)
     righty_dir.write_digital(0)
 
 def backwards():
