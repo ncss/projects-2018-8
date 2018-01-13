@@ -11,11 +11,13 @@ a_was_pressed = False
 b_was_pressed = False
 
 # Master variables
+UPDATE_SCORE_RATE = 500
+update_score_timer = UPDATE_SCORE_RATE
 question_asked = False
 
 
 class Player:
-    START_POINTS = 30000 # The number of points (in ms) the player begins with
+    START_POINTS = 10000 # The number of points (in ms) the player begins with
     INCORRECT_PENALTY = 5000 # The amount of points (in ms) subtracted due to a wrong answer
 
     def __init__(self):
@@ -91,7 +93,7 @@ while True:
                 num_players = MAX_PLAYERS
         if ab_pressed:
             players = [Player() for _ in range(num_players)]
-            display.scroll("Player 0 turn")
+            display.scroll("1")
             getting_players = False
         else:
             display.show(str(num_players))
@@ -105,21 +107,45 @@ while True:
             question_asked = True
         # Checks for incoming answer
         incoming = radio.receive()
-        print(incoming)
         if question_asked:
             if incoming == "tof:" + answer or incoming == "tof:" + not_answer(answer):
                 if incoming == "tof:" + answer:
                     players[current_player].questions_correct += 1
                 else:
-                    players[current_player].points -= INCORRECT_PENALTY
+                    players[current_player].points -= Player.INCORRECT_PENALTY
                 question_asked = False
-                display.scroll("Player {} Score: {}".format(current_player, players[current_player].points))
                 radio.send("tof:" + answer + "-answer")
-                current_player = (current_player + 1) % len(players)
-                display.scroll("Player {} turn".format(current_player))
+                display.scroll(": {}".format(players[current_player].points))
+                if players[current_player].points <= 0:
+                    players[current_player].points = 0
+                    display.scroll("{} Game over! {} questions!".format(current_player, players[current_player].questions_correct))
+                    question_asked = False
+                    if num_players <= 2:
+                        getting_players = True
+                        current_player = 0
+                        if num_players == 2:
+                            display.scroll("{} wins!".format(2 - current_player)) # this just happens to display the right thing (0 -> player 2 wins, 1 -> player 1 wins)
+                    else:
+                        alive_player = -1
+                        # loop through the players
+                        for player_index in range(num_players):
+                            if players[player_index].points > 0:
+                                if alive_player == -1: # we have found an alive player
+                                    alive_player = player_index
+                                else: # we already have an alive player, so we have concluded that at least two players are still alive
+                                    break
+                        else: # putting 'else' at the end of a 'for loop' means the following indented code will run if the for loop finished naturally (i.e. was not 'break'd out of)
+                            # If this code runs, there is one player still alive
+                            display.scroll("{} wins!".format(alive_player + 1))
+                            getting_players = True
+                            current_player = 0
+                if not getting_players:
+                    current_player = (current_player + 1) % len(players)
             else:
                 players[current_player].points -= time_elapsed
-        
-        if players[current_player].points <= 0:
-            display.scroll("Player {} Game over! {} questions answered correctly!".format(current_player, questions_answered))
-            question_asked = False
+
+        display.show(str(current_player + 1))
+        update_score_timer -= time_elapsed
+        if update_score_timer <= 0:
+            update_score_timer = UPDATE_SCORE_RATE
+            radio.send("score:{}".format(players[current_player]))
