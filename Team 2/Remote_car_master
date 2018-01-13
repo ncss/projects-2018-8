@@ -1,0 +1,47 @@
+from microbit import *
+import radio
+pin1.write_analog(0)
+pin2.write_analog(0)
+radio.on()
+radio.config(channel=42)
+
+def x_if(x_value):
+    if(x_value>700):   #down
+        radio.send("x_down")
+        print("x_down")
+    elif (x_value>300) and (x_value<700):        #middle
+        radio.send("x_middle")
+        print("x_middle")
+    elif(x_value<300): #up
+        radio.send("x_up")
+        print("x_up")
+def y_if(y_value):
+    if(y_value>700):  #right
+        radio.send("y_right")
+        print("y_right")
+    elif  (y_value>=300) and (y_value<=700):       #middle
+        radio.send("y_middle")
+        print("y_middle")
+    elif(y_value<300):#left
+        radio.send("y_left")
+        print("y_left")
+def print_x_y (x_val, y_val):
+    x_y_analog_read = []
+    x_y_analog_read.append(str(x_val))
+    x_y_analog_read.append(str(y_val))
+    print(x_y_analog_read)
+while True:
+    x_joystick = pin1.read_analog()
+    y_joystick = pin2.read_analog()
+    x_if(x_joystick)
+    y_if(y_joystick)
+    print_x_y(x_joystick, y_joystick)
+    sleep(100)
+    
+    
+
+    
+
+
+
+
