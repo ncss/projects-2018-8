@@ -10,7 +10,7 @@ np = neopixel.NeoPixel(pin13, max_no_lights)
 
 
 lights_on = max_no_lights
-max_value = 60000
+max_value = 30000
 
 radio.on()
 radio.config(channel = 49)
@@ -27,6 +27,8 @@ while True:
         print(msg)
         new_msg = msg[6:]
         new_no = int(new_msg)
+        if new_no < 0:
+            new_no = 0
         lights_on = math.ceil(new_no/max_value*max_no_lights)
         print(lights_on)
         for pixel_id in range(lights_on, max_no_lights):
