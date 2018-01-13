@@ -1,0 +1,30 @@
+from microbit import *
+pin1.write_analog(0)
+pin2.write_analog(0)
+
+def x_if(x)
+
+while True:
+    x_y_analog_read = []
+    x = pin1.read_analog()
+    y = pin2.read_analog()
+    x_y_analog_read.append(str(x))
+    x_y_analog_read.append(str(y))
+    print(x_y_analog_read)
+    
+    if(x>700):   #down
+        #if(y>700):  #right
+        #elif(y<300):#left
+        #else:       #middle
+    elif(x<300): #up
+        #if(y>700):  #right
+        #elif(y<300):#left
+        #else:       #middle
+    else:        #middle
+        #if(y>700):  #right
+        #elif(y<300):#left
+        #else:       #middle
+    if(y>700):  #right
+    elif(y<300):#left
+    else:       #middle
+    
