@@ -34,6 +34,10 @@ while True:
         for pixel_id in range(lights_on, max_no_lights):
             np[pixel_id] = (0, 0, 0)
         np.show()
+        if lights_on > max_no_lights/2:
+            for pixel_id in range(0, lights_on):
+                np[pixel_id] = (0, 100, 0)  
+            np.show()
         if lights_on <= max_no_lights/2:
             for pixel_id in range(0, lights_on):
                 np[pixel_id] = (127, 60, 3)
