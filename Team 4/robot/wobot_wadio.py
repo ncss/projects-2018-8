@@ -58,6 +58,8 @@ def map_to_range(x):
     elif x > b:
         x = b
     return 1023 - ((x-a)/(b-a)*(d-c)+c)
+    
+    
 l_previous_speeds = [150]
 r_previous_speeds = [150]
 l_avg = 0
