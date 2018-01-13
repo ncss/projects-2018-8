@@ -40,7 +40,7 @@ def map_to_range(value):
     initial_min, initial_max, new_min, new_max = 600, 800, 175, 1023
     #correct values outside range
     if value < initial_min:
-        value = inital_min
+        value = initial_min
     if value > initial_max:
         value = initial_max
     # Figure out how 'wide' each range is
