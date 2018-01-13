@@ -57,9 +57,10 @@ def map_to_range(x):
     return 1023 - ((x-a)/(b-a)*(d-c)+c)
 previous_speeds = [150]
 avg = 0
+length = 2
 while True:
     msg = radio.receive()
-    if len(previous_speeds) == 4:
+    if len(previous_speeds) == length:
         previous_speeds.pop(0)
     if msg:
         previous_speeds.append(map_to_range(int(msg))+300)
@@ -70,9 +71,10 @@ while True:
     avg = sum(previous_speeds)/len(previous_speeds)
     if avg < 0:
         avg = 0
-    print(avg)
     left_wheel(avg)
     right_wheel(avg)
-    sensor = left_light.read_analog()
-    if sensor < 20:
-       radio.send('time')
+    if left_light.read_analog() < 20 and right_light.read_analog() < 20:
+        radio.send('time')
+        left_wheel(0)
+        right_wheel(0)
+    
