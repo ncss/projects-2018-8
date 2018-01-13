@@ -5,7 +5,7 @@ GAME_CHANNEL = 49
 INCORRECT_PENALTY = 5000    # The amount of points (in ms) subtracted due to a wrong answer.
 POINTS = 50000     # The amount of points (in ms) the player begins with.
 radio.on()
-radio.config(channel = GAME_CHANNEL)
+radio.config(channel = GAME_CHANNEL, power = 7)
 question_asked = False
 questions_answered = 0
 

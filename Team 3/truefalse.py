@@ -3,7 +3,7 @@ import radio
 import music
 
 GAME_CHANNEL = 49
-radio.config(channel=GAME_CHANNEL)
+radio.config(channel=GAME_CHANNEL, power = 7)
 radio.on()
 
 TICK = Image("00009:00090:90900:09000:00000")
