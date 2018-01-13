@@ -86,9 +86,18 @@ while True:
         r_avg = 0
     left_wheel(l_avg)
     right_wheel(r_avg)
-    if left_light.read_analog() < 20 and right_light.read_analog() < 20:
-        radio.send('time')
-        left_wheel(0)
-        right_wheel(0)
-        sleep(10000)
     
+    sensor = left_light.read_analog()
+    if sensor < 20:
+        sense_num += 1
+        sleep(2000)
+    
+        if sense_num == 1:
+            radio.send("start")
+            sleep(2000)
+            
+        if sense_num == 2:
+            radio.send("end")
+            sleep(1000)
+            left_forward.write_analog(0)
+            right_forward.write_analog(0)
