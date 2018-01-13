@@ -35,11 +35,10 @@ while True:
         if (button.boolean and msg == "tof:true-answer") or (not button.boolean and msg == "tof:false-answer"):
             display.show(TICK)
             music.play(music.POWER_UP)
-            celebrate_timer = CELEBRATE_TIME
         else:
             display.show(CROSS)
             music.play(music.WAWAWAWAA)
-            celebrate_timer = CELEBRATE_TIME
+        celebrate_timer = CELEBRATE_TIME
 
     if button.was_pressed():
         if button.boolean:
