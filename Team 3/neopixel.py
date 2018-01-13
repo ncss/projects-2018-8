@@ -7,7 +7,7 @@ import math
 # Setup the Neopixel strip on pin0 with a length of 10 pixels
 np = neopixel.NeoPixel(pin0, 10)
 
-max_no_lights = 8
+max_no_lights = 10
 lights_on = max_no_lights
 max_value = 60000
 radio.on()
