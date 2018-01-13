@@ -1,0 +1,14 @@
+from microbit import *
+import radio
+radio.on()
+radio.config(channel = 43)
+
+while True:
+    if button_a.is_pressed():
+        radio.send("JUMP")
+        display.show(Image.ARROW_N)
+    if button_b.is_pressed():
+        radio.send("DUCK")
+        display.show(Image.ARROW_S)
+    else:
+        display.clear()
