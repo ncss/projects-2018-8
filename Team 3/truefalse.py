@@ -30,19 +30,19 @@ celebrate_timer = CELEBRATE_TIME
 previous_time = running_time()
 
 while True:
-    print(celebrate_timer, CELEBRATE_TIME)
     msg = radio.receive()
     if msg and msg.startswith("tof:") and msg.endswith("-answer"):
         if (button.boolean and msg == "tof:true-answer") or (not button.boolean and msg == "tof:false-answer"):
             display.show(TICK)
             music.play(music.POWER_UP, wait=False)
         else:
+            print("nice")
             display.show(CROSS)
             music.play(music.WAWAWAWAA, wait=False)
         celebrate_timer = 0
 
     if button.was_pressed():
-        if button.boolean:
+        if True or button.boolean:
             radio.send("tof:true")
         else:
             radio.send("tof:false")
