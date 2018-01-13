@@ -24,8 +24,8 @@ class Button:
         
         return False
 
-button = Button(pin0, True)
-CELEBRATE_TIME = 1000
+button = Button(pin1, True)
+CELEBRATE_TIME = 2000
 celebrate_timer = CELEBRATE_TIME
 previous_time = running_time()
 
@@ -39,7 +39,7 @@ while True:
         else:
             display.show(CROSS)
             music.play(music.WAWAWAWAA, wait=False)
-        celebrate_timer = CELEBRATE_TIME
+        celebrate_timer = 0
 
     if button.was_pressed():
         if button.boolean:
@@ -50,7 +50,7 @@ while True:
     current_time = running_time()
     time_elapsed = current_time - previous_time
     previous_time = current_time
-    celebrate_timer -= time_elapsed
-    if celebrate_timer <= 0:
-        celebrate_timer = 0
+    celebrate_timer += time_elapsed
+    if celebrate_timer >= CELEBRATE_TIME:
+        celebrate_timer = CELEBRATE_TIME
         display.clear()
