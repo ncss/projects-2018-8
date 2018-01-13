@@ -31,7 +31,7 @@ previous_time = running_time()
 
 while True:
     msg = radio.receive()
-    if msg and msg.startswith("tof:"):
+    if msg and msg.startswith("tof:") and msg.endswith("-answer"):
         if (button.boolean and msg == "tof:true-answer") or (not button.boolean and msg == "tof:false-answer"):
             display.show(TICK)
             music.play(music.POWER_UP)
