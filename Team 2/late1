@@ -1,0 +1,119 @@
+from microbit import *
+import radio
+radio.on()
+radio.config(channel=42)
+pin8.write_analog(0)#RIGHT output 
+pin0.write_analog(0)#LEFT ouput 
+pin12.write_analog(0)#RIGHT 0v
+pin16.write_analog(0)#LEFT 0v
+
+l_speed = 0
+r_speed = 0
+
+turn_state = 0
+run_state = 0
+
+while True:
+    if l_speed>0 and r_speed>0:
+        pin8.write_analog(l_speed)#RIGHT output 
+        pin0.write_analog(r_speed)#LEFT ouput 
+        pin12.write_analog(0)#RIGHT 0v
+        pin16.write_analog(0)#LEFT 0v
+    elif l_speed<0 and r_speed<0:
+        pin12.write_analog(0-l_speed)#RIGHT output 
+        pin16.write_analog(0-r_speed)#LEFT ouput 
+        pin8.write_analog(0)#RIGHT 0v
+        pin0.write_analog(0)#LEFT 0v       
+    else:
+        pin8.write_analog(0)#RIGHT output 
+        pin0.write_analog(0)#LEFT ouput 
+        pin12.write_analog(0)#RIGHT 0v
+        pin16.write_analog(0)#LEFT 0v 
+    message = radio.receive()
+    
+    
+    
+    '''
+    if message == "y_middle" and turn_state != 0:
+        if turn_state == 1:
+            l_speed -= 100
+            turn_state = 0 
+        elif turn_state == (0-1):
+            r_speed -= 100
+            turn_state = 0 
+    elif message == "y_right" and turn_state != 1:
+        l_speed += 100
+        turn_state = 1
+    elif message == "y_left" and turn_state != (0-1):
+        r_speed += 100
+        turn_state = (0-1)
+    else:
+        l_speed += 0
+        r_speed += 0
+    if not run_state:
+        if message == "y_middle" and turn_state != 0:
+            turn_state = 0
+    if run_state:
+        elif (message == "y_right") and (turn_state != 1):  
+            l_speed = 1023
+            r_speed = 512
+            turn_state = 1
+        elif (message == "y_left") and (turn_state != (0-1)):
+            l_speed = 512
+            r_speed = 1023
+            turn_state = (0-1)
+    if message == "x_middle" :
+        l_speed = 0
+        r_speed = 0
+        run_state = 0
+    elif message == "x_up":
+        l_speed = 512
+        r_speed = 512
+        run_state = 1
+    elif message == "x_down":
+        l_speed = 0-512
+        r_speed = 0-512
+        run_state = 2
+    '''
+
+    if message == "x_middle" :
+        run_state = 0
+    elif message == "x_up":
+        run_state = 1
+    elif message == "x_down":
+        run_state = 2
+    if message == "y_middle" :
+        turn_state = 0
+    elif message == "y_right":
+        turn_state = 1
+    elif message == "y_left":
+        turn_state = 2
+        
+    if run_state == 1:
+        if turn_state == 2:
+            l_speed = 1023
+            r_speed = 300
+        elif turn_state == 1:
+            l_speed = 300
+            r_speed = 1023
+        elif turn_state == 0:
+            l_speed = 700
+            r_speed = 700
+    elif run_state == 2:
+        if turn_state == 2:
+            l_speed = -1023
+            r_speed = -300
+        elif turn_state == 1:
+            l_speed = -300
+            r_speed = -1023
+        elif turn_state == 0:
+            l_speed = -700
+            r_speed = -700
+    elif run_state == 0:
+        
+        l_speed = 0
+        r_speed = 0
+    
+    
+    print(str(l_speed))
+    print(str(r_speed))
