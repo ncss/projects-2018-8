@@ -15,7 +15,7 @@ question_asked = False
 
 
 class Player:
-    START_POINTS = 60000 # The number of points (in ms) the player begins with
+    START_POINTS = 30000 # The number of points (in ms) the player begins with
     INCORRECT_PENALTY = 5000 # The amount of points (in ms) subtracted due to a wrong answer
 
     def __init__(self):
