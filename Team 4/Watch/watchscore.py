@@ -12,9 +12,15 @@ prev_time = 0
 race_going = 0
 while True:
     if button_a.is_pressed() == 1 and pressed == 0:
+        display.show("3")
+        sleep(1000)
+        display.show("2")
+        sleep(1000)
+        display.show("1")
+        sleep(1000)
         radio.send("start")
         start_time = running_time()
-        display.scroll("Start Running", wait = False, loop = False)
+        display.scroll("GO!", wait = False, loop = False)
         pressed = 1
         race_going = 1
 

@@ -9,6 +9,7 @@ prev_time = 0;
 time = 0;
 # Loop Program
 while True:
+    display.show("L")
     # Read Gesture
     if accelerometer.was_gesture("shake"):
         # Set Time Between Gestures

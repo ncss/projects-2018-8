@@ -3,10 +3,10 @@ import radio
 
 radio.on()
 radio.config(channel=41)
-left_back = pin12
-left_forward = pin8
-right_back = pin16
-right_forward = pin0
+left_back = pin16
+left_forward = pin0
+right_back = pin12
+right_forward = pin8
 left_light = pin1
 right_light = pin2
 sense_num = 0
@@ -98,8 +98,8 @@ while True:
         print(light)
         if  light < 20:
             radio.send('time')
-
             left_wheel(0)
             right_wheel(0)
-            sleep(10000)
+            game_start = 0
+
         
