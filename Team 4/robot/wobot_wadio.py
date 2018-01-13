@@ -31,33 +31,24 @@ def right_wheel(speed):
         right_forward.write_analog(speed)
         right_back.write_analog(0)
 
-#follows line. Increased turn ratio results in tighter turning. 
-#turn speed must be a value between 0 -> 1023.
-#time must be in milliseconds
-def follow_line(turn_ratio, turn_speed):
-    total_time = 0
-    while True:
-        if left_light.read_analog() > 10 and right_light.read_analog() > 10:
-            left_wheel(turn_speed)
-            right_wheel(turn_speed)
-        elif left_light.read_analog() > 10:
-            left_wheel(turn_speed)
-            right_wheel(turn_speed/turn_ratio)
-        elif right_light.read_analog() > 10:
-            right_wheel(turn_speed)
-            left_wheel(turn_speed/turn_ratio)
 #maps sensor value to output value, where x is sensor value, 
 #a->b is the range of sensor values, and c->d is the range of desired output values.
-def map_to_range(x):
-    a = 600
-    b = 2000
-    c = 170
-    d = 1023
-    if x < a:
-        x = a
-    elif x > b:
-        x = b
-    return 1023 - ((x-a)/(b-a)*(d-c)+c)
+def map_to_range(value):
+    initial_min, initial_max, new_min, new_max = 600, 800, 175, 1023
+    #correct values outside range
+    if value < initial_min:
+        value = inital_min
+    if value > initial_max:
+        value = initial_max
+    # Figure out how 'wide' each range is
+    initial_span = initial_max - initial_min
+    new_span = new_max - new_min
+
+    # Convert the left range into a 0-1 range (float)
+    scaled_value = (value - initial_min) / initial_span
+
+    # Convert the 0-1 range into a value in the right range.
+    return 1023 - (new_min + (scaled_value * new_span))
     
     
 l_previous_speeds = [150]
@@ -99,6 +90,8 @@ while True:
             r_avg = 0
         left_wheel(l_avg)
         right_wheel(r_avg)
+        
+        print('speeds:', l_avg, r_avg)
         
         light = left_light.read_analog()
         print(light)
