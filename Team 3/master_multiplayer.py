@@ -118,6 +118,7 @@ while True:
                 display.scroll(": {}".format(players[current_player].points))
                 if players[current_player].points <= 0:
                     players[current_player].points = 0
+                    radio.send("score:{}".format(players[current_player]))
                     display.scroll("{} Game over! {} questions!".format(current_player, players[current_player].questions_correct))
                     question_asked = False
                     if num_players <= 2:
@@ -148,4 +149,4 @@ while True:
         update_score_timer -= time_elapsed
         if update_score_timer <= 0:
             update_score_timer = UPDATE_SCORE_RATE
-            radio.send("score:{}".format(players[current_player]))
+            radio.send("score:{}".format(players[current_player].points))
